@@ -86,10 +86,7 @@ var server = http.createServer(function(req, res) {
     res.end();
 });
 
-var port = config.server.port.dev;
-if (process.env.NODE_ENV === 'production') {
-    port = config.server.port.prod;
-}
+var port = process.env.PORT || config.server.port.dev;
 server.listen(port, function() {
     console.log('Listening on port ' + port);
 });
