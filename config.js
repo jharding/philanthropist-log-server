@@ -5,10 +5,13 @@ exports.server = {
     }
 };
 
-exports.mailOptions = {
-    from: 'Philanthropist Log Aggregator',
-    to: 'jacob.s.harding@gmail.com',
-    subject: 'Philanthropist Log Report',
-    text: '',
-    html: ''
+exports.mail = {
+    interval: 86400000,
+    options: {
+        from: 'Philanthropist Log Aggregator',
+        to: 'jacob.s.harding@gmail.com',
+        subject: 'Philanthropist Log Report',
+        text: '',
+        html: ''
+    }
 };

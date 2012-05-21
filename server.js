@@ -38,10 +38,10 @@ var smtpTransport = nodemailer.createTransport('SMTP', {
 var sendLogReport = function() {
     // no messages so no point in sending an email report
     if (messages.length === 0) {
+        console.log('No messages, report not sent');
         return;
     }
-    
-    var mailOptions = _.clone(config.mailOptions);
+    var mailOptions = _.clone(config.mail.options);
 
     // construct the email in text and html form
     var text = messages.length + ' messages were logged\n\n';
@@ -58,16 +58,19 @@ var sendLogReport = function() {
 
     smtpTransport.sendMail(mailOptions, function(err, res) {
         // only clear the messages if the email was sent successfully
-        if (!err) {
+        if (err) {
+            console.error('Sending of report failed: ' + err);
+        }
+
+        else {
+            console.log('Report sent: ' + res.message);
             messages = [];
         }
     });
 };
 
-// attempt to send log report daily
-var MS_IN_DAY = 86400000;
-setTimeout(sendLogReport, 120000);
-setInterval(sendLogReport, MS_IN_DAY);
+// attempt to send daily log report
+setInterval(sendLogReport, config.mail.interval);
 
 var server = http.createServer(function(req, res) {
     var parseQueryString = true;
