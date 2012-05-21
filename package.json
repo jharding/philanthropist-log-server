@@ -1,7 +1,7 @@
 {
   "author": "Jake Harding <jacob.s.harding@gmail.com> (http://thejakeharding.com)",
   "name": "philanthropist-log-server",
-  "description": "Server for collection log messages from Philanthropist extension.",
+  "description": "Server for collecting log messages from Philanthropist.",
   "version": "0.0.0",
   "private": true,
   "repository": {
