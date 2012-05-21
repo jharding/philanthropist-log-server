@@ -27,14 +27,19 @@ router.addRoute('/log', function(query, headers) {
     messages.push(message);
 });
 
+// configure mail transport based off of config file or env variables
 var smtpTransport = nodemailer.createTransport('SMTP', {
-    service: 'Gmail',
+    service: config.mail.sender ? 
+             config.mail.sender.service : process.env.MAIL_SERVICE,
     auth: {
-        user: config.gmail ? config.gmail.user : process.env.GMAIL_USER,
-        pass: config.gmail ? config.gmail.password : process.env.GMAIL_PASSWORD
+        user: config.mail.sender ? 
+              config.mail.sender.user : process.env.MAIL_USER,
+        pass: config.mail.sender ? 
+              config.mail.sender.password : process.env.MAIL_PASSWORD
     }
 });
 
+// constructs and emails the log report
 var sendLogReport = function() {
     // no messages so no point in sending an email report
     if (messages.length === 0) {
@@ -57,13 +62,14 @@ var sendLogReport = function() {
     mailOptions.html = html;
 
     smtpTransport.sendMail(mailOptions, function(err, res) {
-        // only clear the messages if the email was sent successfully
         if (err) {
             console.error('Sending of report failed: ' + err);
         }
 
         else {
             console.log('Report sent: ' + res.message);
+            
+            // only clear the messages if the email was sent successfully
             messages = [];
         }
     });
