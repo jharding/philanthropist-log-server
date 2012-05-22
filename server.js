@@ -29,14 +29,15 @@ router.addRoute('/log', function(query, headers) {
     // if the messages doesn't currently have expires set, set it
     // at 24 hours in the future
     if (!messages.expires) {
-        messages.expires = new Date(Date.now() + config.mail.interval);
+        messages.expires = new Date(Date.now() + config.mail.interval).
+                           getTime();
         console.log('Log report to be sent after ' + 
                     messages.expires.toString());
     }
 
     // messages collection has expired and it's time for the log
     // report to be sent
-    if (messages.expires > Date.now()) {
+    if (messages.expires < Date.now()) {
         sendLogReport(); 
     }
 });
