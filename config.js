@@ -6,8 +6,7 @@ exports.server = {
 };
 
 exports.mail = {
-    //interval: 86400000,
-    interval: 2000,
+    interval: 86400000,
     options: {
         from: 'Philanthropist Log Aggregator',
         to: 'jacob.s.harding@gmail.com',
