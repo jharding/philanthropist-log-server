@@ -25,6 +25,20 @@ router.addRoute('/log', function(query, headers) {
 
     console.log(message);
     messages.push(message);
+
+    // if the messages doesn't currently have expires set, set it
+    // at 24 hours in the future
+    if (!messages.expires) {
+        messages.expires = new Date(Date.now() + config.mail.interval);
+        console.log('Log report to be sent after ' + 
+                    messages.expires.toString());
+    }
+
+    // messages collection has expired and it's time for the log
+    // report to be sent
+    if (messages.expires > Date.now()) {
+        sendLogReport(); 
+    }
 });
 
 // configure mail transport based off of config file or env variables
@@ -74,9 +88,6 @@ var sendLogReport = function() {
         }
     });
 };
-
-// attempt to send daily log report
-setInterval(sendLogReport, config.mail.interval);
 
 var server = http.createServer(function(req, res) {
     var parseQueryString = true;
